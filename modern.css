@@ -1,0 +1,113 @@
+
+.portfolio-home{background:#050505;color:#f3f3f3}
+.portfolio-home .header{background:#050505e8;border-bottom-color:#ffffff20}
+.portfolio-home .screen:not(.hero){background:#050505}
+.portfolio-home .screen:not(.hero)::before{background:linear-gradient(180deg,#050505 0%,#0a0a0a 55%,#050505 100%)}
+.portfolio-home .screen:not(.hero)::after{opacity:.1}
+.portfolio-home .section-grid-lines{opacity:.3}
+.portfolio-home .ambient-scene{opacity:.7;filter:grayscale(1) contrast(1.05) brightness(.9)}
+.portfolio-home .project-gallery .ambient-scene{opacity:.75;filter:grayscale(1) contrast(1.1) brightness(1)}
+.portfolio-home .hero .hero-actions{margin-top:34px}
+.portfolio-home .project-title-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin:3px 0 7px}
+.portfolio-home .bitwall-card .project-title-row h3{margin:0}
+.portfolio-home .project-partner{display:inline-flex;align-items:center;gap:7px;padding-left:15px;border-left:1px solid #ffffff35;color:#b5b5b5;font:600 16px/1.1 'Segoe UI Variable','Segoe UI',Arial,sans-serif;letter-spacing:-.025em}
+.portfolio-home .project-partner img{width:21px;height:24px;object-fit:contain}
+.portfolio-home h2{font:600 clamp(58px,6.3vw,88px)/.99 'Segoe UI Variable Display','Segoe UI',Arial,sans-serif;letter-spacing:-.065em}
+.portfolio-home .section-head{border-bottom-color:#ffffff2c;padding-bottom:18px}
+.portfolio-home h2 span{color:#969696}
+.portfolio-home .profile-panel,
+.portfolio-home .skills-screen .terminal-panel,
+.portfolio-home .portfolio-project{border:1px solid #ffffff36;border-radius:14px;background:#090909ed;box-shadow:0 20px 55px #0007;overflow:hidden}
+.portfolio-home .profile-panel{padding:26px 28px;gap:0}
+.portfolio-home .profile-panel .console-tag{font:11px/1.2 'Silkscreen',monospace;letter-spacing:.08em;color:#a2a2a2}
+.portfolio-home .profile-panel .profile-lead{font:600 clamp(19px,1.9vw,25px)/1.27 'Segoe UI Variable','Segoe UI',Arial,sans-serif;letter-spacing:-.03em;margin:18px 0 15px;max-width:none;color:#f4f4f4}
+.portfolio-home .profile-panel .profile-detail{font:400 16px/1.48 'Segoe UI Variable','Segoe UI',Arial,sans-serif;letter-spacing:0;margin:0;color:#b9b9b9;max-width:none}
+.portfolio-home .skill-stack .card-heading{background:#ffffff09;border-bottom:1px solid #ffffff25;padding:14px 20px;font:600 12px/1.2 'Segoe UI Variable','Segoe UI',Arial,sans-serif;letter-spacing:.16em;color:#efefef}
+.portfolio-home .skill-stack .terminal-content{padding:12px 20px 15px}
+.portfolio-home .skill-stack .skill-list{gap:0 24px}
+.portfolio-home .skill-stack .skill-list li{display:block;padding:7px 0;border-bottom-color:#ffffff17}
+.portfolio-home .skill-stack .skill-list strong{font:550 15px/1.25 'Segoe UI Variable','Segoe UI',Arial,sans-serif;letter-spacing:-.015em}
+.portfolio-home .skill-stack .interest-list{gap:0 20px}
+.portfolio-home .skill-stack .interest-list>div{padding:7px 0;border-bottom-color:#ffffff17}
+.portfolio-home .skill-stack .interest-list h3{font:550 15px/1.2 'Segoe UI Variable','Segoe UI',Arial,sans-serif;letter-spacing:-.015em}
+.portfolio-home .skill-stack .interest-icon{font-family:'Segoe UI Symbol',Arial,sans-serif;color:#b6b6b6}
+.portfolio-home .portfolio-project{background:#090909f2}
+.portfolio-home .portfolio-project:hover{border-color:#ffffff7a;transform:translateY(-3px)}
+.portfolio-home .card-art{background:#080808}
+.portfolio-home .card-body .project-category{font:600 10px/1.3 'Segoe UI Variable','Segoe UI',Arial,sans-serif;letter-spacing:.13em;color:#969696}
+.portfolio-home .card-body h3,
+.portfolio-home .bitwall-card .card-body h3,
+.portfolio-home .c-lock-card .card-body h3,
+.portfolio-home .scientra-card .card-body h3{font-family:'Segoe UI Variable Display','Segoe UI',Arial,sans-serif;font-weight:650;letter-spacing:-.055em}
+.portfolio-home .card-body p,
+.portfolio-home .bitwall-card .role-summary p,
+.portfolio-home .c-lock-card .card-body p,
+.portfolio-home .scientra-card .card-body p{font-family:'Segoe UI Variable','Segoe UI',Arial,sans-serif;line-height:1.37;color:#bcbcbc}
+.portfolio-home .role-summary{border-left-color:#eeeeee}
+.portfolio-home .role-summary strong,
+.portfolio-home .bitwall-card .role-summary strong{font:600 21px/1.17 'Segoe UI Variable Display','Segoe UI',Arial,sans-serif;letter-spacing:-.035em}
+.portfolio-home .role-summary>span{color:#a3a3a3}
+.portfolio-home .tags span{border-color:#ffffff32;background:#ffffff0a;border-radius:4px;color:#cacaca}
+.portfolio-home .card-link,
+.portfolio-home .c-lock-card .card-link,
+.portfolio-home .scientra-card .card-link{font:600 14px/1.2 'Segoe UI Variable','Segoe UI',Arial,sans-serif;letter-spacing:-.01em}
+.portfolio-home .server-art{background:#080808}
+.portfolio-home .server-art .bitwall-viz{filter:grayscale(1) contrast(1.08) brightness(.85)}
+.portfolio-home .contact-screen h2{font-size:clamp(84px,10vw,142px)}
+.portfolio-home .contact-screen p:not(.screen-kicker){font:400 clamp(20px,2.1vw,28px)/1.34 'Segoe UI Variable','Segoe UI',Arial,sans-serif;letter-spacing:-.025em;color:#bcbcbc}
+.portfolio-home .contact-screen .screen-inner{container-type:inline-size}
+.portfolio-home .email{display:flex;width:fit-content;max-width:100%;gap:clamp(10px,2vw,24px);white-space:nowrap;overflow-wrap:normal;word-break:normal;font-family:'Segoe UI Variable Display','Segoe UI',Arial,sans-serif;font-size:clamp(17px,4.4vw,58px);font-size:clamp(17px,7.7cqi,58px);font-weight:600;line-height:1.2;letter-spacing:-.04em}
+.portfolio-home .email>span{flex:none;font-size:.8em;line-height:1}
+.portfolio-home .linkedin-link{border-radius:9px;background:#0a0a0aef;border-color:#ffffff4a}
+@media(max-width:900px){
+  .portfolio-home .profile-panel{min-height:0}
+  .portfolio-home .profile-panel .profile-lead{font-size:24px}
+  .portfolio-home .profile-panel .profile-detail{font-size:16px}
+  .portfolio-home .ambient-scene{opacity:.6}
+}
+@media(max-width:600px){
+  .portfolio-home h2{font-size:clamp(48px,11.5vw,68px)}
+  .portfolio-home .profile-panel{padding:22px}
+  .portfolio-home .profile-panel .profile-lead{font-size:22px}
+  .portfolio-home .profile-panel .profile-detail{font-size:15px}
+  .portfolio-home .ambient-scene{opacity:.45}
+  .portfolio-home .project-gallery .ambient-scene{opacity:.5}
+  .portfolio-home .contact-screen h2{font-size:clamp(68px,14vw,95px)}
+}
+
+
+.portfolio-home .skills-screen .ambient-scene{filter:grayscale(1) contrast(1.06) brightness(1.08)}
+.portfolio-home .skills-screen .section-grid-lines{opacity:.13}
+.portfolio-home .skills-screen .profile-panel,.portfolio-home .skills-screen .terminal-panel{background:linear-gradient(145deg,#080909e8,#070808da);backdrop-filter:blur(5px)}
+html:has(.portfolio-home){scroll-snap-type:y proximity}
+html.is-section-scrolling:has(.portfolio-home){scroll-behavior:auto;scroll-snap-type:none}
+.portfolio-home .screen:not(.hero) .screen-inner{transition:opacity 1s ease,transform 1.1s cubic-bezier(.22,1,.36,1)}
+.portfolio-home .screen:not(.hero){--scene-strength:.7}
+.portfolio-home .project-gallery{--scene-strength:.75}
+.portfolio-home .screen:not(.hero) .ambient-scene{opacity:calc(var(--scene-strength)*var(--scene-presence,1));transform:translateY(calc((1 - var(--scene-presence,1))*18px)) scale(calc(1 + (1 - var(--scene-presence,1))*.035));transform-origin:50% 65%;transition:opacity 1.1s ease,transform 1.6s cubic-bezier(.22,1,.36,1)}
+.portfolio-home .header{transition:background 1.5s ease,border-color 1.5s ease}
+.portfolio-home[data-section-theme="skills"] .header{background:#08090aeb;border-bottom-color:#ffffff25}
+.portfolio-home[data-section-theme="projects"] .header{background:#0b0c0eeb;border-bottom-color:#b8c3cb38}
+.portfolio-home[data-section-theme="contact"] .header{background:#0b0909eb;border-bottom-color:#cbbeb82e}
+.section-atmosphere{position:fixed;inset:0;z-index:12;pointer-events:none;overflow:hidden;isolation:isolate}
+.section-atmosphere__light,.section-atmosphere__veil{position:absolute;inset:0;pointer-events:none}
+.section-atmosphere__light{opacity:0;transition:opacity 1.7s cubic-bezier(.22,1,.36,1);mix-blend-mode:screen}
+.section-atmosphere__light--home{background:radial-gradient(ellipse at 86% 20%,#b6b6b609,transparent 58%)}
+.section-atmosphere__light--skills{background:radial-gradient(ellipse at 18% 62%,#c6c6c618,transparent 62%),linear-gradient(126deg,transparent 45%,#fff03 60%,transparent 76%)}
+.section-atmosphere__light--projects{background:radial-gradient(ellipse at 86% 34%,#aebec522,transparent 65%),linear-gradient(90deg,transparent 35%,#c0d2d508 72%,transparent)}
+.section-atmosphere__light--contact{background:radial-gradient(ellipse at 50% 100%,#bcb3af1c,transparent 64%),radial-gradient(ellipse at 16% 13%,#fff06,transparent 48%)}
+.portfolio-home[data-section-theme="home"] .section-atmosphere__light--home,.portfolio-home[data-section-theme="skills"] .section-atmosphere__light--skills,.portfolio-home[data-section-theme="projects"] .section-atmosphere__light--projects,.portfolio-home[data-section-theme="contact"] .section-atmosphere__light--contact{opacity:1}
+.section-atmosphere__veil{opacity:var(--section-mix,0);background:linear-gradient(180deg,#0004,transparent 32%,#0002 50%,transparent 68%,#0005),radial-gradient(ellipse at 50% 50%,transparent 35%,#0003 100%);transition:opacity .75s ease}
+html.intro-active .section-atmosphere,html.is-leaving .section-atmosphere{visibility:hidden}
+@media(max-width:900px){.portfolio-home .screen:not(.hero){--scene-strength:.6}}
+@media(max-width:850px){html:has(.portfolio-home){scroll-snap-type:none}}
+@media(max-width:600px){.portfolio-home .screen:not(.hero){--scene-strength:.45}.portfolio-home .project-gallery{--scene-strength:.5}.section-atmosphere__light{opacity:0!important}}
+.portfolio-home .screen.skills-screen{--scene-strength:.9}
+@media(max-width:900px){.portfolio-home .screen.skills-screen{--scene-strength:.7}}
+@media(max-width:600px){.portfolio-home .screen.skills-screen{--scene-strength:.6}}
+@media(prefers-reduced-motion:reduce){
+  html:has(.portfolio-home){scroll-behavior:auto;scroll-snap-type:none}
+  .portfolio-home .screen:not(.hero) .screen-inner,.portfolio-home .screen:not(.hero) .ambient-scene,.portfolio-home .header{transition:none}
+  .portfolio-home .screen:not(.hero) .ambient-scene{transform:none}
+  .section-atmosphere{display:none}
+}

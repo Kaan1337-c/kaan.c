@@ -1,0 +1,23 @@
+.opening-screen{display:none}
+html.intro-active,html.intro-active body{overflow:hidden!important}
+.intro-active .opening-screen{position:fixed;inset:0;z-index:1000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:24px;background:#050505;color:#efefef;isolation:isolate;opacity:1;transition:opacity 4.8s cubic-bezier(.66,0,.78,.56)}
+.intro-active .opening-screen.is-fading{opacity:0;pointer-events:none}
+.intro-active .opening-screen.is-skipping{transition-duration:.35s}
+.opening-screen .opening-title{position:relative;flex:none;width:9ch;height:1.1em;text-align:center;margin:0;font:700 clamp(30px,5vw,52px)/1.1 'Silkscreen',monospace;letter-spacing:.12em;text-indent:.12em;color:#f0f0f0}
+.opening-title-glyph{display:inline-block;width:1.1ch;white-space:pre;text-indent:0;will-change:transform,opacity}
+.opening-title.is-resolved::before,.opening-title.is-resolved::after{display:none}
+.opening-title[data-phase="scattering"]::before,.opening-title[data-phase="scattering"]::after{display:none}
+.opening-title::before,.opening-title::after{content:attr(data-glitch);position:absolute;inset:0;pointer-events:none;background:#050505;clip-path:inset(50% 0 50%);animation:opening-glitch 3.2s steps(1,end) infinite}
+.opening-title::before{color:#a94053;animation-delay:-1.5s}
+.opening-title::after{color:#e6cdd1;animation-direction:reverse}
+.opening-art-stage{position:relative;flex:none;width:min(960px,calc(100vw - 48px),calc(133.333dvh - 226.667px));aspect-ratio:4/3;overflow:hidden;isolation:isolate;background:transparent}
+.opening-art{position:absolute;left:50%;top:50%;width:max-content;max-width:none;margin:0;padding:0;border:0;background:none;color:#c9c9c9;font:12px/1.04 Consolas,'Cascadia Mono','Segoe UI Symbol',monospace;letter-spacing:0;white-space:pre;text-align:left;transform:translate(-50%,-50%) scale(var(--art-scale,1));transform-origin:center;user-select:none}
+.opening-particles{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:-1}
+.has-particles .opening-art{visibility:hidden}
+.opening-enter{flex:none;appearance:none;border:0;background:transparent;padding:10px 14px;color:#aaa;font:11px/1.4 Consolas,monospace;letter-spacing:.1em;cursor:pointer;transition:color .2s}
+.opening-enter:hover,.opening-enter:focus-visible{color:#fff}
+.opening-enter:focus-visible{outline:1px solid #888;outline-offset:4px}
+#main:focus{outline:none}
+@keyframes opening-glitch{0%,8%,13%,42%,46%,72%,77%,100%{clip-path:inset(50% 0 50%);transform:translateX(0)}9%{clip-path:inset(18% 0 61%);transform:translateX(-3px)}11%{clip-path:inset(66% 0 12%);transform:translateX(4px)}43%{clip-path:inset(43% 0 43%);transform:translateX(-5px)}45%{clip-path:inset(10% 0 76%);transform:translateX(2px)}73%{clip-path:inset(74% 0 7%);transform:translateX(3px)}75%{clip-path:inset(28% 0 56%);transform:translateX(-2px)}}
+@media(max-width:600px){.intro-active .opening-screen{padding:18px;gap:18px}.opening-art-stage{width:min(calc(100vw - 36px),calc(133.333dvh - 226.667px))}.opening-screen .opening-title{font-size:32px}}
+@media(prefers-reduced-motion:reduce){.opening-title::before,.opening-title::after{display:none}.intro-active .opening-screen{transition:opacity .2s linear!important}}
