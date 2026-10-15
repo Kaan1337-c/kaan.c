@@ -12,6 +12,7 @@
 .portfolio-home .bitwall-card .project-title-row h3{margin:0}
 .portfolio-home .project-partner{display:inline-flex;align-items:center;gap:7px;padding-left:15px;border-left:1px solid #ffffff35;color:#b5b5b5;font:600 16px/1.1 'Segoe UI Variable','Segoe UI',Arial,sans-serif;letter-spacing:-.025em}
 .portfolio-home .project-partner img{width:21px;height:24px;object-fit:contain}
+.portfolio-home .scientra-card .scientra-art .scientra-logo-provided{width:51px;height:58px;max-height:58px;object-fit:none;object-position:-73px -52px;filter:grayscale(1) contrast(1.25);mix-blend-mode:screen}
 .portfolio-home h2{font:600 clamp(58px,6.3vw,88px)/.99 'Segoe UI Variable Display','Segoe UI',Arial,sans-serif;letter-spacing:-.065em}
 .portfolio-home .section-head{border-bottom-color:#ffffff2c;padding-bottom:18px}
 .portfolio-home h2 span{color:#969696}
