@@ -63,3 +63,21 @@
 .portfolio-home.js-enhanced #skills[data-bio-state="pending"] :is(.capability-list,.exploration-list) li{opacity:0;transform:translateY(12px);transition-delay:0s}
 .portfolio-home.js-enhanced #skills[data-bio-state="visible"] :is(.capability-list,.exploration-list) li{opacity:1;transform:translateY(0)}
 @media(prefers-reduced-motion:reduce){.portfolio-home :is(.capability-list,.exploration-list) li{opacity:1!important;transform:none!important;transition:none!important}}
+.portfolio-home .header nav{position:relative;isolation:isolate}
+.portfolio-home .header nav a{position:relative;z-index:1}
+.portfolio-home .header nav a.active{background:transparent}
+.nav-current{position:absolute;left:0;top:0;z-index:0;width:var(--nav-width,0px);height:var(--nav-height,40px);translate:var(--nav-x,0px) var(--nav-y,0px);opacity:0;pointer-events:none;border-radius:7px;background:#ffffff10;border:1px solid #ffffff04;transition:translate .52s cubic-bezier(.2,.75,.2,1),width .52s cubic-bezier(.2,.75,.2,1),height .3s ease,opacity .2s ease}
+.nav-current:not(.is-ready){transition:none}
+.portfolio-home .contact-screen::before{background:linear-gradient(90deg,#050505ed,#05050599 56%,#05050526)}
+.contact-screen .scene-lighting__ambient{background:radial-gradient(ellipse at 94% 12%,#eeeeee1e,transparent 48%)}
+.contact-screen .scene-lighting__beam{background:conic-gradient(from 175deg at 94% -18%,transparent 0deg,#eeeeee05 8deg,#eeeeee22 21deg,#eeeeee08 31deg,transparent 40deg);transform-origin:94% 0}
+.contact-screen .scene-lighting__reflection{background:radial-gradient(ellipse at 73% 88%,#eeeeee0d,transparent 42%)}
+.portfolio-home .contact-screen .screen-inner>*{transition:opacity .65s ease var(--contact-delay,.1s),transform .85s cubic-bezier(.16,.7,.2,1) var(--contact-delay,.1s)}
+.portfolio-home.js-enhanced #contact[data-entry-state="pending"] .screen-inner>*{opacity:0;transform:translateY(18px);transition-delay:0s}
+.portfolio-home.js-enhanced #contact[data-entry-state="visible"] .screen-inner>*{opacity:1;transform:translateY(0)}
+.portfolio-home .portfolio-project{transition:opacity .65s ease var(--card-delay,.1s),translate .9s cubic-bezier(.16,.7,.2,1) var(--card-delay,.1s),scale .9s cubic-bezier(.16,.7,.2,1) var(--card-delay,.1s),border-color .2s ease,transform .2s ease}
+.portfolio-home.js-enhanced .portfolio-project[data-reveal-state="pending"]{opacity:0;translate:0 24px;scale:.985;transition-delay:0s}
+.portfolio-home.js-enhanced .portfolio-project[data-reveal-state="visible"]{opacity:1;translate:0 0;scale:1}
+.portfolio-home .portfolio-project:focus-within,.portfolio-home #contact .screen-inner>:focus-visible,.portfolio-home #contact .screen-inner>:focus-within{opacity:1!important;translate:0 0!important;scale:1!important;transform:none!important;transition:none!important}
+@media(max-width:639px){.contact-screen .scene-lighting__beam{background:conic-gradient(from 178deg at 112% -12%,transparent 0deg,#eeeeee04 10deg,#eeeeee15 23deg,transparent 39deg)}}
+@media(prefers-reduced-motion:reduce){.nav-current,.portfolio-home .contact-screen .screen-inner>*,.portfolio-home .portfolio-project{transition:none!important}.portfolio-home .contact-screen .screen-inner>*,.portfolio-home .portfolio-project{opacity:1!important;translate:0 0!important;scale:1!important;transform:none!important}}
