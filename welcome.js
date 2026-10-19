@@ -109,13 +109,12 @@
     if(stopped||run!==generation)return;
     output.replaceChildren();output.classList.remove('fading');
     panel.dataset.phase=String(index);
-    const prompt=document.createElement('div');prompt.className='cmd-prompt';prompt.textContent='console.log';
     const line=document.createElement('p');line.className='cmd-message';line.lang=part.lang;
     if(['ar','fa','he','ur'].includes(part.lang))line.dir='rtl';
     const target=document.createElement('span');
     const text=document.createTextNode('');target.append(text);line.append(target);
     const cursor=document.createElement('span');cursor.className='typing-cursor';cursor.textContent='▋';cursor.setAttribute('aria-hidden','true');line.append(cursor);
-    output.append(prompt,line);
+    output.append(line);
     if(part.email){
       const email=document.createElement('a');email.className='cmd-email';email.href='mailto:kaanyaxiz@icloud.com';email.textContent='kaanyaxiz@icloud.com';
       output.append(email);
