@@ -208,7 +208,7 @@
     window.cancelAnimationFrame(frame);
     frame = 0;
     previousTime = 0;
-    if (visible && !reducedMotion.matches && !document.hidden) frame = window.requestAnimationFrame(loop);
+    if (visible && !reducedMotion.matches && !window.portfolioMotionPaused && !document.hidden) frame = window.requestAnimationFrame(loop);
     else draw(reducedMotion.matches ? 1.7 : elapsed);
   }
 
@@ -216,7 +216,7 @@
     const bounds = host.getBoundingClientRect();
     width = Math.max(1, bounds.width);
     height = Math.max(1, bounds.height);
-    const density = Math.min(window.devicePixelRatio || 1, 2);
+    const density = Math.min(window.devicePixelRatio || 1, 1.5);
     canvas.width = Math.round(width * density);
     canvas.height = Math.round(height * density);
     ctx.setTransform(density, 0, 0, density, 0, 0);
@@ -232,6 +232,7 @@
     }, { threshold: .01 }).observe(host);
   } else visible = true;
   document.addEventListener('visibilitychange', updateAnimation);
+  document.addEventListener('portfolio:motion', updateAnimation);
   if (reducedMotion.addEventListener) reducedMotion.addEventListener('change', updateAnimation);
   else reducedMotion.addListener(updateAnimation);
   resize();

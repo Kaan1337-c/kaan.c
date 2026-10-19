@@ -109,7 +109,7 @@
     if(stopped||run!==generation)return;
     output.replaceChildren();output.classList.remove('fading');
     panel.dataset.phase=String(index);
-    const prompt=document.createElement('div');prompt.className='cmd-prompt';prompt.textContent='C:\\Windows\\System32> echo';
+    const prompt=document.createElement('div');prompt.className='cmd-prompt';prompt.textContent='> console.log("hello")';
     const line=document.createElement('p');line.className='cmd-message';line.lang=part.lang;
     if(['ar','fa','he','ur'].includes(part.lang))line.dir='rtl';
     const target=document.createElement('span');

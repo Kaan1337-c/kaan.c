@@ -5,7 +5,7 @@
   let screen, button, stage, art, done = false, fading = false;
   let holdTimer, fadeTimer;
   let particleFrame = 0, particleCanvas, particleContext, particles = [], dust = [];
-  let animationStart = 0, scatterStart = 0;
+  let animationStart = 0, scatterStart = 0, metrics = null, glyphAtlas = null, glyphMap = new Map(), atlasCell = null;
   const inertElements = [];
   const artSymbols = [...'░▒▓⠿⣿※⌁⌘⋮⊹{}<>/\\+*#%&@$'];
   const titleSymbols = [...'!@#$%&*+=?~^<>|{}[]/\\'];
@@ -52,6 +52,17 @@
     particleCanvas.width = Math.round(stage.clientWidth * ratio);
     particleCanvas.height = Math.round(stage.clientHeight * ratio);
     particleContext.setTransform(ratio, 0, 0, ratio, 0, 0);
+    const box = art.getBoundingClientRect(), stageBox = stage.getBoundingClientRect();
+    const style = getComputedStyle(art), scale = box.width / art.offsetWidth;
+    metrics = { width: stage.clientWidth, height: stage.clientHeight, box, stageBox, fontSize: parseFloat(style.fontSize) * scale, lineHeight: parseFloat(style.lineHeight) * scale, fontFamily: style.fontFamily };
+    const glyphs = [...new Set([...artSymbols, ...particles.map(p => p.glyph)])];
+    const cellWidth = Math.ceil(metrics.fontSize * 2 + 4), cellHeight = Math.ceil(metrics.lineHeight + 5);
+    atlasCell = {width:cellWidth,height:cellHeight};
+    glyphAtlas = document.createElement('canvas');
+    glyphAtlas.width = cellWidth * 2 * glyphs.length;glyphAtlas.height = cellHeight * 4;
+    const ink = glyphAtlas.getContext('2d');ink.scale(2,2);ink.font = metrics.fontSize + 'px ' + metrics.fontFamily;ink.textBaseline='top';
+    glyphMap = new Map(glyphs.map((glyph,index) => [glyph,index]));
+    ['#d2cccc','#b94b5b'].forEach((color,row) => {ink.fillStyle=color;glyphs.forEach((glyph,index)=>ink.fillText(glyph,index*cellWidth+1,row*cellHeight));});
   }
 
   function animateArt() {
@@ -104,7 +115,7 @@
         glyph.style.opacity = 1 - spread * .9;
       });
       title.dataset.glitch = titleGlyphs.map(glyph => glyph.textContent).join('');
-      const ctx = particleContext, width = stage.clientWidth, height = stage.clientHeight;
+      const ctx = particleContext, { width, height, box, stageBox, fontSize, lineHeight, fontFamily } = metrics;
       const seconds = (now - animationStart) / 1000;
       ctx.clearRect(0, 0, width, height);
       dust.forEach((p, index) => {
@@ -116,13 +127,8 @@
         if (index % 7 === 0) { ctx.fillRect(x - 3, y, 7, .6); ctx.fillRect(x, y - 3, .6, 7); }
       });
       if (!scatterStart && elapsed >= 4500) screen.classList.add('is-assembled');
-      const box = art.getBoundingClientRect();
-      const stageBox = stage.getBoundingClientRect();
       drawVeins(ctx, width, height, seconds, box, stageBox);
-      const style = getComputedStyle(art), scale = box.width / art.offsetWidth;
-      const fontSize = parseFloat(style.fontSize) * scale;
-      const lineHeight = parseFloat(style.lineHeight) * scale;
-      ctx.font = `${fontSize}px ${style.fontFamily}`;
+      ctx.font = `${fontSize}px ${fontFamily}`;
       ctx.textBaseline = 'top';
       ctx.fillStyle = '#c9c9c9';
       particles.forEach(p => {
@@ -136,9 +142,10 @@
         const originX = p.x * width, originY = p.y * height;
         ctx.globalAlpha = Math.min(1, progress * 4) * (1 - disperse * .6);
         const symbolPhase = progress < .88 || disperse > .035;
-        ctx.fillStyle = symbolPhase && p.digit % 7 === 0 ? '#b94b5b' : '#d2cccc';
-        ctx.fillText(symbolPhase ? artSymbols[(p.digit + Math.floor(seconds * 14)) % artSymbols.length] : p.glyph, originX + (targetX - originX) * blend + Math.sin(blend * Math.PI) * p.arc,
-          originY + (targetY - originY) * blend);
+        const glyph = symbolPhase ? artSymbols[(p.digit + Math.floor(seconds * 14)) % artSymbols.length] : p.glyph;
+        const color = symbolPhase && p.digit % 7 === 0 ? 1 : 0;
+        ctx.drawImage(glyphAtlas,glyphMap.get(glyph)*atlasCell.width*2,color*atlasCell.height*2,atlasCell.width*2,atlasCell.height*2,
+          originX + (targetX-originX)*blend + Math.sin(blend*Math.PI)*p.arc-1,originY+(targetY-originY)*blend,atlasCell.width,atlasCell.height);
       });
       ctx.globalAlpha = 1;
     }

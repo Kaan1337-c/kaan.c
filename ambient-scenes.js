@@ -4,7 +4,7 @@
   const reduce=matchMedia('(prefers-reduced-motion: reduce)');
   const scenes=canvases.map((canvas,index)=>({canvas,ctx:canvas.getContext('2d'),type:canvas.dataset.scene,index,w:0,h:0,visible:false}));
   const villageImage=new Image();
-  villageImage.src='assets/night-japanese-village.png';
+  villageImage.src='assets/night-japanese-village.webp';
   let villageSource=null;
   villageImage.onload=()=>{
     const layer=document.createElement('canvas');layer.width=villageImage.naturalWidth;layer.height=villageImage.naturalHeight;
@@ -16,7 +16,7 @@
   const poly=(c,points,fill,outline)=>{c.beginPath();points.forEach(([x,y],i)=>i?c.lineTo(x,y):c.moveTo(x,y));c.closePath();if(fill){c.fillStyle=fill;c.fill();}if(outline){c.strokeStyle=outline;c.lineWidth=1;c.stroke();}};
   const rect=(c,x,y,w,h,fill)=>{c.fillStyle=fill;c.fillRect(x,y,w,h);};
   function resize(s){
-    const r=s.canvas.getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,1.5);
+    const r=s.canvas.getBoundingClientRect(),dpr=Math.min(devicePixelRatio||1,innerWidth<768?1:1.25);
     s.w=r.width;s.h=r.height;s.canvas.width=Math.max(1,Math.round(r.width*dpr));s.canvas.height=Math.max(1,Math.round(r.height*dpr));
     s.ctx.setTransform(dpr,0,0,dpr,0,0);render(s,0);
   }
@@ -491,9 +491,10 @@
   }
   function render(s,t){if(!s.w||!s.h)return;s.ctx.clearRect(0,0,s.w,s.h);if(s.type==='datacenter')datacenter(s,t);else if(s.type==='garden')garden(s,t);else village(s,t);}
   let frame=0,last=0;
-  function tick(now){frame=requestAnimationFrame(tick);if(reduce.matches||now-last<33)return;last=now;scenes.forEach(s=>{if(s.visible)render(s,now/1000);});}
+  function tick(now){frame=requestAnimationFrame(tick);if(reduce.matches||window.portfolioMotionPaused||document.hidden||document.documentElement.classList.contains('intro-active')||now-last<50)return;last=now;scenes.forEach(s=>{if(s.visible)render(s,now/1000);});}
   const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{const s=scenes.find(item=>item.canvas===entry.target);if(s){s.visible=entry.isIntersecting;render(s,performance.now()/1000);}}),{threshold:.05});
   scenes.forEach(s=>{new ResizeObserver(()=>resize(s)).observe(s.canvas);observer.observe(s.canvas);resize(s);});
+  document.addEventListener('portfolio:motion',()=>{last=0;});
   reduce.addEventListener('change',()=>scenes.forEach(s=>render(s,0)));
   frame=requestAnimationFrame(tick);
   addEventListener('pagehide',()=>cancelAnimationFrame(frame),{once:true});
