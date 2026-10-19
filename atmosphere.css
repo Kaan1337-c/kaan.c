@@ -1,0 +1,44 @@
+.portfolio-home .header{width:min(550px,calc(100% - 32px));gap:28px;transition:background .8s ease,border-color .8s ease,box-shadow .8s ease}
+.portfolio-home .header nav{margin-left:auto}
+.portfolio-home[data-section-theme="home"] .header{background:#090909ed;border-color:#ffffff28;box-shadow:0 8px 28px #0006}
+.portfolio-home[data-section-theme="skills"] .header{background:#161616f5;border-color:#ffffff42;box-shadow:0 8px 30px #0007,0 1px 0 #ffffff08 inset}
+.portfolio-home[data-section-theme="projects"] .header{background:#060606f5;border-color:#ffffff58;box-shadow:0 8px 26px #0009,0 -1px 0 #ffffff18 inset}
+.portfolio-home[data-section-theme="contact"] .header{background:#101010ef;border-color:#ffffff30;box-shadow:0 8px 30px #0007}
+.portfolio-home .hero-gradient{background:linear-gradient(90deg,#050505e8,#050505a6 29%,#05050500 64%)}
+.portfolio-home .skills-backdrop{opacity:.9}
+.portfolio-home .skills-screen::before{background:linear-gradient(90deg,#050505bf,#05050555 64%,#05050566)}
+.portfolio-home .project-gallery .ambient-scene{opacity:.64!important}
+.portfolio-home .project-gallery::before{background:linear-gradient(180deg,#020202cc,#02020200 48%,#02020299)}
+.portfolio-home .contact-screen .ambient-scene{opacity:.73!important}
+.portfolio-home .contact-screen::before{background:linear-gradient(90deg,#050505d9,#05050588 57%,#05050522)}
+.chapter-transition{position:fixed;inset:0;z-index:24;visibility:hidden;overflow:hidden;pointer-events:none;isolation:isolate}
+.chapter-transition.is-active{visibility:visible}
+.chapter-transition__curtain{position:absolute;inset:-20% 0;background:linear-gradient(180deg,#05050500,#050505e8 31%,#050505 50%,#050505db 69%,#05050500);opacity:0}
+.chapter-transition__light{position:absolute;inset:0;opacity:0;background:radial-gradient(ellipse at 50% 70%,#ffffff24,transparent 68%)}
+.chapter-transition__caption{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:block;width:100%;text-align:center;color:#dedede;opacity:0;font:500 clamp(22px,3vw,42px)/1.2 'Segoe UI Variable','Segoe UI',Arial,sans-serif;letter-spacing:-.045em;text-shadow:0 2px 18px #000}
+.chapter-transition[data-theme="home"] .chapter-transition__light{background:radial-gradient(ellipse at 76% 35%,#ffffff20,transparent 62%)}
+.chapter-transition[data-theme="skills"] .chapter-transition__light{background:linear-gradient(118deg,transparent 36%,#ffffff0d 37%,transparent 38%,transparent 49%,#ffffff18 50%,transparent 51%,transparent 61%,#ffffff0d 62%,transparent 63%),radial-gradient(ellipse at 68% 60%,#fff2,transparent 65%)}
+.chapter-transition[data-theme="projects"] .chapter-transition__light{background:linear-gradient(180deg,transparent 30%,#ffffff05 44%,#ffffff2e 50%,#ffffff05 56%,transparent 70%),repeating-linear-gradient(0deg,transparent 0 31px,#ffffff06 31px 32px);}
+.chapter-transition[data-theme="contact"] .chapter-transition__light{background:radial-gradient(ellipse at 25% 90%,#ffffff28,transparent 60%),radial-gradient(ellipse at 80% 20%,#ffffff12,transparent 54%)}
+.portfolio-home .chapter-entering .screen-inner,.portfolio-home .chapter-entering .hero-content{animation:chapter-arrive var(--arrival-duration,1s) cubic-bezier(.18,.7,.2,1) both!important}
+@keyframes chapter-arrive{0%,24%{opacity:.15;transform:translateY(24px)}70%,100%{opacity:1;transform:translateY(0)}}
+@media(max-width:639px){
+  .portfolio-home .header{width:calc(100% - 24px);gap:8px;padding-left:12px;padding-right:12px}
+  .portfolio-home .header nav{gap:2px}
+  .portfolio-home .header nav a{padding:0 12px}
+  .portfolio-home .hero-gradient{background:linear-gradient(180deg,#050505 0%,#050505 27%,#05050500 55%)}
+  .portfolio-home .skills-backdrop{opacity:.48}
+  .portfolio-home .skills-screen::before{background:#05050566}
+  .portfolio-home .project-gallery .ambient-scene{opacity:.36!important}
+  .portfolio-home .contact-screen .ambient-scene{opacity:.62!important}
+  .portfolio-home .chapter-entering .screen-inner{animation:chapter-arrive-mobile var(--arrival-duration,1s) ease both!important}
+  .chapter-transition__caption{font-size:24px}
+}
+@keyframes chapter-arrive-mobile{0%,18%{opacity:.55}80%,100%{opacity:1}}
+@media(prefers-reduced-motion:reduce){
+  .chapter-transition{display:none!important}
+  .portfolio-home .chapter-entering .screen-inner,.portfolio-home .chapter-entering .hero-content{animation:none!important}
+  .portfolio-home .header{transition:none}
+}
+.chapter-transition__caption{left:0;top:calc(50% - .6em);transform:none}@media(max-width:639px){.portfolio-home .header nav a{padding:0 9px}}
+.chapter-transition__caption{color:#f4f4f4;font-weight:600;letter-spacing:-.035em}

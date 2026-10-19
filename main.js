@@ -5,34 +5,74 @@
   const links = [...document.querySelectorAll('.header nav a')];
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   const desktop = matchMedia('(min-width: 1024px) and (pointer: fine)');
-  const motionButton = document.querySelector('.motion-toggle');
   let bounds = [], active = 0, frame = 0, wheelTime = 0, wheelAmount = 0, consumed = false;
   let unlockAt = 0, focusTarget = null;
-  let paused = false;
-  try { paused = localStorage.getItem('portfolio-motion') === 'paused'; } catch {}
   document.body.classList.add('js-enhanced');
   function motionState() {
-    window.portfolioMotionPaused = paused || reduced.matches;
-    root.dataset.motion = window.portfolioMotionPaused ? 'paused' : 'playing';
-    if (motionButton) {
-      motionButton.setAttribute('aria-pressed', String(paused));
-      motionButton.setAttribute('aria-label', paused ? 'Resume animations' : 'Pause animations');
-      motionButton.textContent = paused ? 'Play' : 'Pause';
-    }
+    window.portfolioMotionPaused = reduced.matches;
+    root.dataset.motion = reduced.matches ? 'paused' : 'playing';
     document.dispatchEvent(new Event('portfolio:motion'));
   }
-  motionButton?.addEventListener('click', () => {
-    paused = !paused;
-    try { localStorage.setItem('portfolio-motion', paused ? 'paused' : 'playing'); } catch {}
-    motionState();
-  });
   motionState();
+  const passage = document.createElement('div');
+  passage.className = 'chapter-transition';
+  passage.setAttribute('aria-hidden', 'true');
+  const curtain = document.createElement('div');
+  curtain.className = 'chapter-transition__curtain';
+  const light = document.createElement('div');
+  light.className = 'chapter-transition__light';
+  const caption = document.createElement('span');
+  caption.className = 'chapter-transition__caption';
+  passage.append(curtain, light, caption);
+  document.body.append(passage);
+  let passageAnimations = [], passageSerial = 0;
+  function clearPassage() {
+    passageSerial++;
+    passageAnimations.forEach(animation => animation.cancel());
+    passageAnimations = [];
+    passage.classList.remove('is-active');
+    sections.forEach(section => section.classList.remove('chapter-entering'));
+  }
+  function showPassage(index, direction, duration = 850, full = true) {
+    clearPassage();
+    if (reduced.matches || root.classList.contains('intro-active')) return;
+    const serial = passageSerial, section = sections[index];
+    passage.dataset.theme = section.id;
+    caption.textContent = {home:'Kaan',skills:'Skills & interests',projects:'Projects',contact:'Let’s talk'}[section.id] || '';
+    passage.classList.add('is-active');
+    section.classList.add('chapter-entering');
+    section.style.setProperty('--arrival-duration', duration + 'ms');
+    const settings = {duration,easing:'linear'};
+    const veilStrength = full ? .94 : .48;
+    passageAnimations = [
+      curtain.animate([
+        {opacity:0,transform:'translateY(' + direction * 95 + '%)'},
+        {opacity:veilStrength,transform:'translateY(' + direction * 14 + '%)',offset:.28},
+        {opacity:veilStrength * .75,transform:'translateY(' + direction * -12 + '%)',offset:.62},
+        {opacity:0,transform:'translateY(' + direction * -95 + '%)'}
+      ],settings),
+      light.animate([{opacity:0,transform:'translateX(-8%)'},{opacity:full?.8:.45,offset:.4},{opacity:0,transform:'translateX(8%)'}],settings),
+      caption.animate([
+        {opacity:0,transform:'translateY(' + direction * 16 + 'px)'},
+        {opacity:full?.85:.45,transform:'translateY(0)',offset:.32},
+        {opacity:full?.85:.45,offset:.55},
+        {opacity:0,transform:'translateY(' + direction * -12 + 'px)'}
+      ],settings)
+    ];
+    Promise.allSettled(passageAnimations.map(animation => animation.finished)).then(() => {
+      if (serial !== passageSerial) return;
+      passage.classList.remove('is-active');
+      section.classList.remove('chapter-entering');
+    });
+  }
   function measure() { bounds = sections.map(section => ({ top: section.offsetTop, height: section.offsetHeight })); }
-  function setActive(index) {
+  function setActive(index, animate = false) {
+    const previous = active;
     active = index;
     const section = sections[index];
     section.classList.add('is-visible');
     document.body.dataset.sectionTheme = section.id;
+    if (animate && previous !== index) showPassage(index, index > previous ? 1 : -1, 760, false);
     links.forEach(link => {
       const selected = link.hash === '#' + section.id;
       link.classList.toggle('active', selected);
@@ -44,7 +84,7 @@
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('is-visible');
-        if (!frame) setActive(sections.indexOf(entry.target));
+        if (!frame) setActive(sections.indexOf(entry.target), true);
       }
     });
   }, { rootMargin: '-35% 0px -35% 0px', threshold: 0 });
@@ -53,6 +93,7 @@
     cancelAnimationFrame(frame);
     frame = 0;
     root.classList.remove('is-section-scrolling');
+    clearPassage();
     focusTarget = null;
   }
   function nearest() {
@@ -62,14 +103,16 @@
   }
   function go(index, keyboard = false, historyMode = 'push') {
     if (index < 0 || index >= sections.length) return;
+    const previous = nearest();
     stop();
     const target = sections[index];
     const top = Math.min(bounds[index].top, document.documentElement.scrollHeight - innerHeight);
     const from = scrollY, distance = top - from;
-    const duration = reduced.matches ? 0 : Math.min(1150, 760 + Math.abs(distance) * .12);
+    const duration = reduced.matches ? 0 : Math.min(1350, 940 + Math.abs(distance) * .1);
     const start = performance.now();
     focusTarget = keyboard ? target : null;
     setActive(index);
+    if (previous !== index && Math.abs(distance) > 20) showPassage(index, Math.sign(distance), duration, true);
     root.classList.add('is-section-scrolling');
     function settle() {
       frame = 0;

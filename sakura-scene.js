@@ -5,7 +5,7 @@
   let ctx = canvas.getContext('2d', {alpha:false});
   const mainContext=ctx;
   const greeting=document.getElementById('visitor-terminal');
-  let foliageBack=null,foliageFront=null, treeTexture=null, uiTime=-1, uiTop=0, chatHeight=154, copyEdge=0;
+  let foliageBack=null,foliageFront=null, treeTexture=null, skyLayer=null, uiTime=-1, uiTop=0, chatHeight=154, copyEdge=0;
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
   let paused=motion.matches, visible=true, width=1, height=1, elapsed=0, last=0, frame=0;
   let stars=[], petals=[], grass=[];
@@ -18,6 +18,8 @@
     const ink=treeTexture.getContext('2d');ink.filter='grayscale(1) brightness(.58) contrast(1.12)';
     ink.drawImage(naturalTree,0,0);draw(elapsed);
   };
+  const landscape=new Image();landscape.src='assets/night-riverbank.webp';
+  landscape.onload=()=>{prepareSky();draw(elapsed);};
   const spriteFrames=[];
   let characterRig=null;
   sprite.src='assets/mono-yawn-24.webp';
@@ -106,20 +108,32 @@
     stars=Array.from({length:35},()=>({x:r()*width,y:r()*height*.65,p:r()*6.28}));
     petals=Array.from({length:70},()=>({x:r()*width,y:r()*height,s:2+r()*4,p:r()*6.28}));
     grass=Array.from({length:140},()=>({x:r()*width,y:height*(.95+r()*.05),p:r()}));
-    ctx=mainContext;draw(elapsed);
+    ctx=mainContext;prepareSky();draw(elapsed);
+  }
+  function prepareSky(){
+    if(width<2||height<2)return;
+    skyLayer=document.createElement('canvas');skyLayer.width=width;skyLayer.height=height;
+    const ink=skyLayer.getContext('2d');
+    ink.fillStyle='#080808';ink.fillRect(0,0,width,height);
+    if(landscape.complete&&landscape.naturalWidth){
+      const scale=Math.max(width/landscape.naturalWidth,height/landscape.naturalHeight);
+      const w=landscape.naturalWidth*scale,h=landscape.naturalHeight*scale;
+      ink.globalAlpha=.72;ink.drawImage(landscape,(width-w)*.5,(height-h)*.55,w,h);ink.globalAlpha=1;
+    }
+    const shade=ink.createLinearGradient(0,0,width,0);
+    shade.addColorStop(0,'#050505ba');shade.addColorStop(.48,'#05050522');shade.addColorStop(1,'#05050555');
+    ink.fillStyle=shade;ink.fillRect(0,0,width,height);
+    const ground=ink.createLinearGradient(0,height*.68,0,height);
+    ground.addColorStop(0,'#05050500');ground.addColorStop(1,'#050505c7');
+    ink.fillStyle=ground;ink.fillRect(0,0,width,height);
   }
   function sky(t){
-    const bg=ctx.createLinearGradient(0,0,0,height);bg.addColorStop(0,'#0b0b0b');bg.addColorStop(.6,'#1a1a1a');bg.addColorStop(1,'#2c2c2c');ctx.fillStyle=bg;ctx.fillRect(0,0,width,height);
-    stars.forEach(s=>rect(s.x,s.y,1,1,Math.sin(t*.5+s.p)>.7?'#c4c4c4':'#696969'));
-    const mx=width*.72,my=height*.18,mr=height*.046;
-    for(let y=-mr;y<mr;y++){const half=Math.floor(Math.sqrt(mr*mr-y*y));rect(mx-half,my+y,half*2,1,'#bebebe');}
-    for(let i=0;i<3;i++){
-      const pts=[[0,height]];for(let j=0;j<=14;j++)pts.push([width*j/14,height*(.65+i*.065-Math.abs(Math.sin(j*.65+i))*.065)]);pts.push([width,height]);polygon(pts,['#1e1e1e','#242424','#1e1e1e'][i]);
-    }
-    rect(0,height*.84,width,height*.16,'#101010');
-    for(let i=0;i<14;i++){rect(width*(.38+Math.sin(i*2.3)*.19)+Math.sin(t+i)*2,height*(.86+i*.006),6+(i%4)*5,1,i%3?'#3c3c3c':'#757575');}
-    polygon([[0,height*.96],[width*.6,height*.96],[width*.68,height*.92],[width,height*.91],[width,height],[0,height]],'#151515');
-    grass.forEach(g=>rect(g.x,g.y,g.p>.7?2:1,1,g.p>.8?'#868686':'#282828'));
+    if(skyLayer)ctx.drawImage(skyLayer,0,0);
+    else{ctx.fillStyle='#080808';ctx.fillRect(0,0,width,height);}
+    const x=width*(.43+Math.sin(t*.11)*.035),y=height*.69;
+    const mist=ctx.createRadialGradient(x,y,0,x,y,width*.58);
+    mist.addColorStop(0,'#dedede09');mist.addColorStop(.5,'#dedede04');mist.addColorStop(1,'#dedede00');
+    ctx.fillStyle=mist;ctx.fillRect(0,0,width,height);
   }
   function treeSpace(t){
     const mobile=width<650;
@@ -248,7 +262,8 @@
       greeting.style.left=`${left}px`;
       greeting.style.setProperty('--pointer-x',`${Math.max(16,Math.min(chatWidth-16,laptopX-left))}px`);
       const laptopTop=uiTop+b.y+b.h*.43;
-      greeting.style.top=`${Math.max(mobile?uiTop+5:95,laptopTop-chatHeight-19)}px`;
+      const chatTop=mobile?Math.min(laptopTop-chatHeight-19,uiTop+headY-chatHeight-35):laptopTop-chatHeight-19;
+      greeting.style.top=`${Math.max(mobile?uiTop+5:95,chatTop)}px`;
     }
   }
   function coder(g,t){
