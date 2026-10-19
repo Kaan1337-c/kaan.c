@@ -1,4 +1,4 @@
-.portfolio-home .header{width:min(550px,calc(100% - 32px));gap:28px;transition:background .8s ease,border-color .8s ease,box-shadow .8s ease}
+.portfolio-home .header{width:min(550px,calc(100% - 32px));gap:28px;transition:background 1.2s ease,border-color 1.2s ease,box-shadow 1.2s ease}
 .portfolio-home .header nav{margin-left:auto}
 .portfolio-home[data-section-theme="home"] .header{background:#090909ed;border-color:#ffffff28;box-shadow:0 8px 28px #0006}
 .portfolio-home[data-section-theme="skills"] .header{background:#161616f5;border-color:#ffffff42;box-shadow:0 8px 30px #0007,0 1px 0 #ffffff08 inset}
@@ -11,34 +11,55 @@
 .portfolio-home .project-gallery::before{background:linear-gradient(180deg,#020202cc,#02020200 48%,#02020299)}
 .portfolio-home .contact-screen .ambient-scene{opacity:.73!important}
 .portfolio-home .contact-screen::before{background:linear-gradient(90deg,#050505d9,#05050588 57%,#05050522)}
-.chapter-transition{position:fixed;inset:0;z-index:24;visibility:hidden;overflow:hidden;pointer-events:none;isolation:isolate}
-.chapter-transition.is-active{visibility:visible}
-.chapter-transition__curtain{position:absolute;inset:-20% 0;background:linear-gradient(180deg,#05050500,#050505e8 31%,#050505 50%,#050505db 69%,#05050500);opacity:0}
-.chapter-transition__light{position:absolute;inset:0;opacity:0;background:radial-gradient(ellipse at 50% 70%,#ffffff24,transparent 68%)}
-.chapter-transition__caption{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:block;width:100%;text-align:center;color:#dedede;opacity:0;font:500 clamp(22px,3vw,42px)/1.2 'Segoe UI Variable','Segoe UI',Arial,sans-serif;letter-spacing:-.045em;text-shadow:0 2px 18px #000}
-.chapter-transition[data-theme="home"] .chapter-transition__light{background:radial-gradient(ellipse at 76% 35%,#ffffff20,transparent 62%)}
-.chapter-transition[data-theme="skills"] .chapter-transition__light{background:linear-gradient(118deg,transparent 36%,#ffffff0d 37%,transparent 38%,transparent 49%,#ffffff18 50%,transparent 51%,transparent 61%,#ffffff0d 62%,transparent 63%),radial-gradient(ellipse at 68% 60%,#fff2,transparent 65%)}
-.chapter-transition[data-theme="projects"] .chapter-transition__light{background:linear-gradient(180deg,transparent 30%,#ffffff05 44%,#ffffff2e 50%,#ffffff05 56%,transparent 70%),repeating-linear-gradient(0deg,transparent 0 31px,#ffffff06 31px 32px);}
-.chapter-transition[data-theme="contact"] .chapter-transition__light{background:radial-gradient(ellipse at 25% 90%,#ffffff28,transparent 60%),radial-gradient(ellipse at 80% 20%,#ffffff12,transparent 54%)}
-.portfolio-home .chapter-entering .screen-inner,.portfolio-home .chapter-entering .hero-content{animation:chapter-arrive var(--arrival-duration,1s) cubic-bezier(.18,.7,.2,1) both!important}
-@keyframes chapter-arrive{0%,24%{opacity:.15;transform:translateY(24px)}70%,100%{opacity:1;transform:translateY(0)}}
+.portfolio-home .screen:not(.hero) .screen-inner{transition:none!important;transform:none!important;opacity:1!important}
+.scene-lighting{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;opacity:0;transition:opacity 1.8s ease}
+.screen.is-lit .scene-lighting{opacity:1}
+.scene-lighting>span{position:absolute;inset:-4%;pointer-events:none}
+.scene-lighting__ambient{background:radial-gradient(ellipse at 80% 16%,#e8e8e824,transparent 58%)}
+.scene-lighting__beam{background:conic-gradient(from 160deg at 87% -15%,transparent 0deg,#eeeeee0b 13deg,#eeeeee25 24deg,#eeeeee07 41deg,transparent 58deg);transform-origin:85% 0}
+.scene-lighting__reflection{background:radial-gradient(ellipse at 72% 90%,#dddddd17,transparent 46%)}
+.skills-screen .scene-lighting__ambient{background:radial-gradient(ellipse at 82% 28%,#f2f2f22b,transparent 62%)}
+.skills-screen .scene-lighting__beam{background:linear-gradient(125deg,transparent 30%,#eeeeee07 38%,#eeeeee21 49%,#eeeeee06 60%,transparent 66%);transform-origin:82% 12%}
+.skills-screen .scene-lighting__reflection{background:radial-gradient(ellipse at 38% 98%,#eeeeee1c,transparent 62%)}
+.project-gallery .scene-lighting__ambient{background:radial-gradient(ellipse at 50% 12%,#eeeeee25,transparent 56%)}
+.project-gallery .scene-lighting__beam{background:linear-gradient(90deg,transparent 3%,#eeeeee0e 10%,transparent 21%,transparent 76%,#eeeeee20 89%,transparent 98%);transform-origin:50% 10%}
+.project-gallery .scene-lighting__reflection{background:radial-gradient(ellipse at 50% 96%,#eeeeee27,transparent 60%)}
+.contact-screen .scene-lighting__ambient{background:radial-gradient(ellipse at 32% 60%,#eeeeee21,transparent 61%)}
+.contact-screen .scene-lighting__beam{background:conic-gradient(from 155deg at 62% -10%,transparent 0deg,#eeeeee0c 15deg,#eeeeee1b 30deg,transparent 60deg);transform-origin:62% 0}
+.contact-screen .scene-lighting__reflection{background:radial-gradient(ellipse at 78% 84%,#eeeeee14,transparent 48%)}
+.portfolio-home .profile-intro{display:block;margin-bottom:28px}
+.portfolio-home .profile-intro .eyebrow-label{font-size:11px;color:#cdcdcd;margin-bottom:15px}
+.portfolio-home .profile-copy{grid-template-columns:1.15fr 1fr;gap:40px}
+.portfolio-home .profile-copy p{max-width:62ch;font-size:15px;line-height:1.65;color:#c3c3c3;transition:opacity .7s ease,transform .9s cubic-bezier(.16,.7,.2,1);transition-delay:.12s}
+.portfolio-home .profile-copy p:nth-child(2){transition-delay:.3s}
+.portfolio-home.js-enhanced #skills[data-bio-state="pending"] .profile-copy p{opacity:0;transform:translateX(34px);transition-delay:0s}
+.portfolio-home.js-enhanced #skills[data-bio-state="visible"] .profile-copy p{opacity:1;transform:translateX(0)}
+.capability-list li:nth-last-child(-n+2){border-bottom:1px solid #ffffff12}
+.capability-list li:last-child{border-bottom:0}
+.capability-list li:last-child:nth-child(odd){grid-column:1/-1}
+@media(min-width:1024px) and (max-height:740px){.portfolio-home .profile-intro{margin-bottom:22px}.portfolio-home .profile-copy p{font-size:14px;line-height:1.55}}
 @media(max-width:639px){
   .portfolio-home .header{width:calc(100% - 24px);gap:8px;padding-left:12px;padding-right:12px}
   .portfolio-home .header nav{gap:2px}
-  .portfolio-home .header nav a{padding:0 12px}
+  .portfolio-home .header nav a{padding:0 9px}
   .portfolio-home .hero-gradient{background:linear-gradient(180deg,#050505 0%,#050505 27%,#05050500 55%)}
   .portfolio-home .skills-backdrop{opacity:.48}
   .portfolio-home .skills-screen::before{background:#05050566}
   .portfolio-home .project-gallery .ambient-scene{opacity:.36!important}
   .portfolio-home .contact-screen .ambient-scene{opacity:.62!important}
-  .portfolio-home .chapter-entering .screen-inner{animation:chapter-arrive-mobile var(--arrival-duration,1s) ease both!important}
-  .chapter-transition__caption{font-size:24px}
+  .screen.is-lit .scene-lighting{opacity:.8}
+  .portfolio-home .profile-copy{grid-template-columns:1fr;gap:15px}
+  .portfolio-home .profile-copy p{font-size:14px;line-height:1.65}
+  .portfolio-home .profile-intro .eyebrow-label{font-size:10px;margin-bottom:13px}
+  .portfolio-home.js-enhanced #skills[data-bio-state="pending"] .profile-copy p{transform:translateX(20px)}
 }
-@keyframes chapter-arrive-mobile{0%,18%{opacity:.55}80%,100%{opacity:1}}
 @media(prefers-reduced-motion:reduce){
-  .chapter-transition{display:none!important}
-  .portfolio-home .chapter-entering .screen-inner,.portfolio-home .chapter-entering .hero-content{animation:none!important}
+  .scene-lighting{transition:none}
+  .scene-lighting>span{animation:none!important}
   .portfolio-home .header{transition:none}
+  .portfolio-home .profile-copy p{opacity:1!important;transform:none!important;transition:none!important}
 }
-.chapter-transition__caption{left:0;top:calc(50% - .6em);transform:none}@media(max-width:639px){.portfolio-home .header nav a{padding:0 9px}}
-.chapter-transition__caption{color:#f4f4f4;font-weight:600;letter-spacing:-.035em}
+.portfolio-home .capability-list li,.portfolio-home .exploration-list li{transition:opacity .55s ease,transform .65s cubic-bezier(.16,.7,.2,1);transition-delay:var(--item-delay,.4s)}
+.portfolio-home.js-enhanced #skills[data-bio-state="pending"] :is(.capability-list,.exploration-list) li{opacity:0;transform:translateY(12px);transition-delay:0s}
+.portfolio-home.js-enhanced #skills[data-bio-state="visible"] :is(.capability-list,.exploration-list) li{opacity:1;transform:translateY(0)}
+@media(prefers-reduced-motion:reduce){.portfolio-home :is(.capability-list,.exploration-list) li{opacity:1!important;transform:none!important;transition:none!important}}

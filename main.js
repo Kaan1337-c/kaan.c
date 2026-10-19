@@ -14,65 +14,40 @@
     document.dispatchEvent(new Event('portfolio:motion'));
   }
   motionState();
-  const passage = document.createElement('div');
-  passage.className = 'chapter-transition';
-  passage.setAttribute('aria-hidden', 'true');
-  const curtain = document.createElement('div');
-  curtain.className = 'chapter-transition__curtain';
-  const light = document.createElement('div');
-  light.className = 'chapter-transition__light';
-  const caption = document.createElement('span');
-  caption.className = 'chapter-transition__caption';
-  passage.append(curtain, light, caption);
-  document.body.append(passage);
-  let passageAnimations = [], passageSerial = 0;
-  function clearPassage() {
-    passageSerial++;
-    passageAnimations.forEach(animation => animation.cancel());
-    passageAnimations = [];
-    passage.classList.remove('is-active');
-    sections.forEach(section => section.classList.remove('chapter-entering'));
+  let lightTimer = 0;
+  const profile = document.getElementById('skills');
+  if (profile) {
+    profile.dataset.bioState = reduced.matches ? 'visible' : 'pending';
+    profile.querySelectorAll('.capability-list li').forEach((item,index) => item.style.setProperty('--item-delay', (.4 + index * .075) + 's'));
+    profile.querySelectorAll('.exploration-list li').forEach((item,index) => item.style.setProperty('--item-delay', (.52 + index * .09) + 's'));
   }
-  function showPassage(index, direction, duration = 850, full = true) {
-    clearPassage();
-    if (reduced.matches || root.classList.contains('intro-active')) return;
-    const serial = passageSerial, section = sections[index];
-    passage.dataset.theme = section.id;
-    caption.textContent = {home:'Kaan',skills:'Skills & interests',projects:'Projects',contact:'Let’s talk'}[section.id] || '';
-    passage.classList.add('is-active');
-    section.classList.add('chapter-entering');
-    section.style.setProperty('--arrival-duration', duration + 'ms');
-    const settings = {duration,easing:'linear'};
-    const veilStrength = full ? .94 : .48;
-    passageAnimations = [
-      curtain.animate([
-        {opacity:0,transform:'translateY(' + direction * 95 + '%)'},
-        {opacity:veilStrength,transform:'translateY(' + direction * 14 + '%)',offset:.28},
-        {opacity:veilStrength * .75,transform:'translateY(' + direction * -12 + '%)',offset:.62},
-        {opacity:0,transform:'translateY(' + direction * -95 + '%)'}
-      ],settings),
-      light.animate([{opacity:0,transform:'translateX(-8%)'},{opacity:full?.8:.45,offset:.4},{opacity:0,transform:'translateX(8%)'}],settings),
-      caption.animate([
-        {opacity:0,transform:'translateY(' + direction * 16 + 'px)'},
-        {opacity:full?.85:.45,transform:'translateY(0)',offset:.32},
-        {opacity:full?.85:.45,offset:.55},
-        {opacity:0,transform:'translateY(' + direction * -12 + 'px)'}
-      ],settings)
-    ];
-    Promise.allSettled(passageAnimations.map(animation => animation.finished)).then(() => {
-      if (serial !== passageSerial) return;
-      passage.classList.remove('is-active');
-      section.classList.remove('chapter-entering');
+  sections.forEach(section => {
+    const lighting = document.createElement('div');
+    lighting.className = 'scene-lighting';
+    lighting.setAttribute('aria-hidden', 'true');
+    ['ambient','beam','reflection'].forEach(type => {
+      const layer = document.createElement('span');
+      layer.className = 'scene-lighting__' + type;
+      lighting.append(layer);
     });
+    section.append(lighting);
+  });
+  function illuminate(index) {
+    clearTimeout(lightTimer);
+    if (root.classList.contains('intro-active')) return;
+    sections.forEach((section, current) => section.classList.toggle('is-lit', current === index));
+    if (profile) profile.dataset.bioState = sections[index] === profile || reduced.matches ? 'visible' : 'pending';
+  }
+  function queueLighting(index) {
+    clearTimeout(lightTimer);
+    lightTimer = setTimeout(() => { if (!frame && nearest() === index) illuminate(index); }, 480);
   }
   function measure() { bounds = sections.map(section => ({ top: section.offsetTop, height: section.offsetHeight })); }
-  function setActive(index, animate = false) {
-    const previous = active;
+  function setActive(index) {
     active = index;
     const section = sections[index];
     section.classList.add('is-visible');
     document.body.dataset.sectionTheme = section.id;
-    if (animate && previous !== index) showPassage(index, index > previous ? 1 : -1, 760, false);
     links.forEach(link => {
       const selected = link.hash === '#' + section.id;
       link.classList.toggle('active', selected);
@@ -84,7 +59,7 @@
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.add('is-visible');
-        if (!frame) setActive(sections.indexOf(entry.target), true);
+        if (!frame) { const index = sections.indexOf(entry.target); setActive(index); queueLighting(index); }
       }
     });
   }, { rootMargin: '-35% 0px -35% 0px', threshold: 0 });
@@ -93,8 +68,9 @@
     cancelAnimationFrame(frame);
     frame = 0;
     root.classList.remove('is-section-scrolling');
-    clearPassage();
+    clearTimeout(lightTimer);
     focusTarget = null;
+    queueLighting(nearest());
   }
   function nearest() {
     const point = scrollY + innerHeight * .4;
@@ -103,8 +79,8 @@
   }
   function go(index, keyboard = false, historyMode = 'push') {
     if (index < 0 || index >= sections.length) return;
-    const previous = nearest();
     stop();
+    clearTimeout(lightTimer);
     const target = sections[index];
     const top = Math.min(bounds[index].top, document.documentElement.scrollHeight - innerHeight);
     const from = scrollY, distance = top - from;
@@ -112,11 +88,11 @@
     const start = performance.now();
     focusTarget = keyboard ? target : null;
     setActive(index);
-    if (previous !== index && Math.abs(distance) > 20) showPassage(index, Math.sign(distance), duration, true);
     root.classList.add('is-section-scrolling');
     function settle() {
       frame = 0;
       root.classList.remove('is-section-scrolling');
+      illuminate(index);
       unlockAt = performance.now() + 100;
       if (historyMode !== 'none' && location.hash !== '#' + target.id) history[historyMode === 'replace' ? 'replaceState' : 'pushState'](null, '', '#' + target.id);
       if (focusTarget) {
@@ -194,9 +170,11 @@
   addEventListener('resize', () => { stop(); measure(); }, { passive: true });
   new ResizeObserver(measure).observe(document.querySelector('main'));
   document.fonts.ready.then(measure);
-  document.addEventListener('portfolio:ready', () => { measure(); setActive(nearest()); });
-  reduced.addEventListener('change', () => { stop(); motionState(); });
+  document.addEventListener('portfolio:ready', () => { measure(); setActive(nearest()); illuminate(nearest()); });
+  addEventListener('scrollend', () => { if (!frame) illuminate(nearest()); }, {passive:true});
+  reduced.addEventListener('change', () => { stop(); motionState(); illuminate(nearest()); });
   addEventListener('pagehide', stop);
   measure();
   setActive(nearest());
+  queueLighting(nearest());
 })();
