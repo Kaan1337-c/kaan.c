@@ -5,7 +5,7 @@
   let ctx = canvas.getContext('2d', {alpha:false});
   const mainContext=ctx;
   const greeting=document.getElementById('visitor-terminal');
-  let foliageBack=null,foliageFront=null, treeTexture=null, uiTime=-1, uiTop=0, chatHeight=154;
+  let foliageBack=null,foliageFront=null, treeTexture=null, uiTime=-1, uiTop=0, chatHeight=154, copyEdge=0;
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
   let paused=motion.matches, visible=true, width=1, height=1, elapsed=0, last=0, frame=0;
   let stars=[], petals=[], grass=[];
@@ -99,7 +99,7 @@
   function line(points,color,thickness){ctx.strokeStyle=color;ctx.lineWidth=thickness;ctx.lineJoin='round';ctx.lineCap='round';ctx.beginPath();points.forEach(([x,y],i)=>i?ctx.lineTo(x,y):ctx.moveTo(x,y));ctx.stroke();}
   function resize(){
     const box=canvas.getBoundingClientRect();
-    uiTop=canvas.offsetTop;uiTime=-1;
+    uiTop=canvas.offsetTop;uiTime=-1;copyEdge=(document.getElementById('hero-title')?.getBoundingClientRect().right||0)-box.left;
     width=Math.ceil(box.width);height=Math.ceil(box.height);canvas.width=width;canvas.height=height;
     ctx.imageSmoothingEnabled=false;
     const r=seeded(418);
@@ -240,11 +240,11 @@
       nameTag.style.transform=`translate(${headX}px,${uiTop+headY-12}px) translate(-50%,-100%)`;
     }
     if(greeting){
-      const chatWidth=mobile?Math.min(210,width-32):Math.min(330,width*.30);
+      const chatWidth=mobile?Math.min(210,width-32):Math.min(300,width*.27);
       greeting.style.width=`${chatWidth}px`;
 
       const laptopX=b.x+b.w*.25;
-      const left=Math.max(16,Math.min(width-chatWidth-16,laptopX-chatWidth*(mobile?.85:.90)));
+      const left=Math.max(16,Math.min(width-chatWidth-16,Math.max(laptopX-chatWidth*(mobile?.85:.90),mobile?0:copyEdge+20)));
       greeting.style.left=`${left}px`;
       greeting.style.setProperty('--pointer-x',`${Math.max(16,Math.min(chatWidth-16,laptopX-left))}px`);
       const laptopTop=uiTop+b.y+b.h*.43;
@@ -303,6 +303,7 @@
   document.addEventListener('visibilitychange',()=>{last=0;});
   new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;last=0;}).observe(canvas);
   new ResizeObserver(resize).observe(canvas);
+  document.fonts.ready.then(resize);
   resize();frame=requestAnimationFrame(tick);
   window.addEventListener('pagehide',()=>{cancelAnimationFrame(frame);frame=0;});
   window.addEventListener('pageshow',event=>{if(event.persisted&&!frame){last=0;frame=requestAnimationFrame(tick);}});
